@@ -6,6 +6,7 @@ to run:
 - `docker-compose up`
 
 ## Step 2
+- Open a new terminal
 - go to the users repo 
 - `cd users`
 - `docker-compose build` && `docker-compose up`
