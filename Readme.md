@@ -1,12 +1,16 @@
 to run:
 
-    docker-compose build && docker-compose up
+## Step1: 
+- clone the mongodb repo from https://github.com/Arqui-software-grupo03/mongodb.git
+- `cd mongodb`
+- `docker-compose up`
 
-    docker exec -it app3 ./manage.py makemigrations mysite
-
-    docker exec -it app3 ./manage.py migrate
-
-    docker exec -it app3 python ./manage.py runserver 0.0.0.0:8000
-
-    try it:
+## Step 2
+- go to the users repo 
+- `cd users`
+- `docker-compose build` && `docker-compose up`
+- `docker exec -it appUsers ./manage.py makemigrations mysite`
+- `docker exec -it appUsers ./manage.py migrate`
+- `docker exec -it appUsers python ./manage.py runserver 0.0.0.0:8000`
+- try it:
         http://localhost:8000/admin
