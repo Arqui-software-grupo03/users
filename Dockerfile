@@ -2,17 +2,17 @@ FROM node:7
 FROM python:latest
 ENV LANG C.UTF-8
 
-RUN mkdir /app3
+RUN mkdir /appUsers
 
 RUN apt-get -y update
 RUN apt-get install -y python python-pip python-dev
 
 # ADD requirements.txt /app/requirements.txt
 
-WORKDIR /app3
+WORKDIR /appUsers
 
-COPY . /app3
-RUN pip install -r /app3/requirements.txt
+COPY . /appUsers
+RUN pip install -r /appUsers/requirements.txt
 
 # RUN apt-get -y update && apt-get -y autoremove
 EXPOSE 8000
