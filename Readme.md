@@ -10,7 +10,6 @@ to run:
 - go to the users repo 
 - `cd users`
 - `docker-compose build` && `docker-compose up`
-- `docker exec -it appUsers ./manage.py makemigrations mysite`
 - `docker exec -it appUsers ./manage.py migrate`
 - `docker exec -it appUsers python ./manage.py runserver 0.0.0.0:8000`
 - try it:
