@@ -58,3 +58,36 @@ class LoginSerializer(serializers.Serializer):
             'email': user.email,
             'token': user.token
         }
+
+class UserSerializer(serializers.ModelSerializer):
+    """Handles serialization and deserialization of User objects."""
+    password = serializers.CharField(
+        max_length=128,
+        min_length=8,
+        write_only=True
+    )
+
+    class Meta:
+        model = User
+        fields = ('email', 'password', 'token',)
+
+        read_only_fields = ('token',)
+
+    def update(self, instance, validated_data):
+        """Performs an update on a User."""
+
+        password = validated_data.pop('password', None)
+
+        for (key, value) in validated_data.items():
+            # For the keys remaining in `validated_data`, we will set them on
+            # the current `User` instance one at a time.
+            setattr(instance, key, value)
+
+        if password is not None:
+            # `.set_password()`  handles all
+            # of the security stuff that we shouldn't be concerned with.
+            instance.set_password(password)
+
+        instance.save()
+
+        return instance
