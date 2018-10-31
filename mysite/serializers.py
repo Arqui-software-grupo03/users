@@ -93,3 +93,6 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+    def get(self, instance):
+        return instance
