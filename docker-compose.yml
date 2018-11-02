@@ -2,6 +2,8 @@ version: "3.5"
 services:
   app:
     container_name: appUsers
+    image: appusers
+    command: bash -c "python ./manage.py makemigrations mysite && python ./manage.py migrate && python ./manage.py runserver 0.0.0.0:8000"
     restart: always
     build: .
     ports:
@@ -11,4 +13,3 @@ networks:
   default:
     external:
       name: mongodb
-    
