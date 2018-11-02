@@ -94,5 +94,5 @@ class UserSerializer(serializers.ModelSerializer):
 
         return instance
 
-    def get(self, instance):
+    def retrieve(self, instance):
         return instance

@@ -1,6 +1,6 @@
 from .renderers import UserJSONRenderer
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -57,3 +57,16 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserRetrieveAPIView(RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    renderer_classes = (UserJSONRenderer,)
+    serializer_class = UserSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+
+        # serializer = self.serializer_class(request.usr)
+        serializer = request.data.get('user', {})
+
+        # return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer, status=status.HTTP_200_OK)
