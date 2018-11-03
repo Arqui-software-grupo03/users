@@ -1,6 +1,6 @@
 from .renderers import UserJSONRenderer
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -66,7 +66,7 @@ class UserRetrieveAPIView(RetrieveAPIView):
 
     #queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
-    renderer_classes = (UserJSONRenderer,)
+    #renderer_classes = (UserJSONRenderer,)
     serializer_class = ProfileSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -87,9 +87,9 @@ class UserRetrieveAPIView(RetrieveAPIView):
 
 
 
-class AllUserRetrieveAPIView(viewsets.ModelViewSet):
+class AllUserRetrieveAPIView(ListAPIView):
 
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
-    renderer_classes = (UserJSONRenderer,)
+    #renderer_classes = (UserJSONRenderer,)
     serializer_class = ProfileSerializer
