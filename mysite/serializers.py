@@ -96,3 +96,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get(self, instance):
         return instance
+
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    username = serializers.CharField(max_length=255, read_only=True)
+    email = serializers.CharField(max_length=255)
+
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'username')
