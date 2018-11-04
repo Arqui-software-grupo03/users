@@ -1,11 +1,13 @@
 from .renderers import UserJSONRenderer
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from .serializers import (LoginSerializer, RegistrationSerializer, UserSerializer,)
+from rest_framework import viewsets
+from .models import User
+from .serializers import (LoginSerializer, RegistrationSerializer, UserSerializer, ProfileSerializer)
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class RegistrationAPIView(APIView):
@@ -37,6 +39,7 @@ class LoginAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    
     permission_classes = (IsAuthenticated,)
     renderer_classes = (UserJSONRenderer,)
     serializer_class = UserSerializer
@@ -57,3 +60,36 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserRetrieveAPIView(RetrieveAPIView):
+
+    #queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    #renderer_classes = (UserJSONRenderer,)
+    serializer_class = ProfileSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+
+
+        try:
+            user = User.objects.get(pk=self.kwargs['user'])
+            serializer = self.serializer_class(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist:
+            content = {'error': 'not found'}
+            return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+        #else:
+        #    content = {'user': 'not found'}
+        #    return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+
+
+class AllUserRetrieveAPIView(ListAPIView):
+
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    #renderer_classes = (UserJSONRenderer,)
+    serializer_class = ProfileSerializer
