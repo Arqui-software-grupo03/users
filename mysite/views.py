@@ -1,6 +1,6 @@
 from .renderers import UserJSONRenderer
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView, ListAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -52,6 +52,7 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         serializer_data = request.data.get('user', {})
+        print(serializer_data)
 
         serializer = self.serializer_class(
             request.user, data=serializer_data, partial=True
@@ -93,3 +94,21 @@ class AllUserRetrieveAPIView(ListAPIView):
     permission_classes = (IsAuthenticated,)
     #renderer_classes = (UserJSONRenderer,)
     serializer_class = ProfileSerializer
+
+
+class DeactivateUserAPIView(UpdateAPIView):
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileSerializer
+
+    def update(self, request, *args, **kwargs):
+        serializer_data = {"is_active": False}
+
+        serializer = self.serializer_class(
+            request.user, data=serializer_data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
