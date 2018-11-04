@@ -104,3 +104,23 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'username')
+
+
+class DeactivateSerializer(serializers.ModelSerializer):
+    """Handles deactivation."""
+
+    class Meta:
+        model = User
+        fields = ('is_active',)
+
+    def update(self, instance, validated_data):
+        """Performs an update on a User."""
+
+        for (key, value) in validated_data.items():
+            # For the keys remaining in `validated_data`, we will set them on
+            # the current `User` instance one at a time.
+            setattr(instance, key, value)
+
+        instance.save()
+
+        return instance

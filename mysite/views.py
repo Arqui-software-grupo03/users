@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from .models import User
-from .serializers import (LoginSerializer, RegistrationSerializer, UserSerializer, ProfileSerializer)
+from .serializers import (LoginSerializer, RegistrationSerializer, UserSerializer, ProfileSerializer,
+    DeactivateSerializer)
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -75,6 +76,7 @@ class UserRetrieveAPIView(RetrieveAPIView):
 
         try:
             user = User.objects.get(pk=self.kwargs['user'])
+            print(user.is_active)
             serializer = self.serializer_class(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -99,15 +101,15 @@ class AllUserRetrieveAPIView(ListAPIView):
 class DeactivateUserAPIView(UpdateAPIView):
 
     permission_classes = (IsAuthenticated,)
-    serializer_class = ProfileSerializer
+    serializer_class = DeactivateSerializer
 
     def update(self, request, *args, **kwargs):
-        serializer_data = {"is_active": False}
+        serializer_data = {'is_active': 0}
 
         serializer = self.serializer_class(
             request.user, data=serializer_data, partial=True
         )
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception=False)
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
